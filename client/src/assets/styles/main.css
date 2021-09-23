@@ -1,0 +1,9 @@
+.head {
+  min-height: 50vh;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  background-image: url("../images/background.jpg");
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: fixed;
+}
