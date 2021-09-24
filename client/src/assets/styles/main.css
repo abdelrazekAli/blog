@@ -1,11 +1,14 @@
+body {
+  transform: translatez(0);
+  -webkit-transform: translatez(0);
+}
 .head {
   min-height: 50vh;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
   background-image: url("../images/background.jpg");
   background-size: cover;
-  background-position: center bottom;
-  background-attachment: fixed;
+  background-position: center;
 }
 
 .nav-link {
@@ -20,8 +23,27 @@
 
 .username-link {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.12rem;
   text-decoration: none;
   color: #7b8a8b;
-  padding-top: 5px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+.card-img-top {
+  height: 15rem !important;
+  object-fit: cover;
+}
+
+.px-1 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }

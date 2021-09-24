@@ -154,7 +154,7 @@ exports.updatePost = async (req, res) => {
 
         res.status(200).send("Successfully updated post");
       }
-    } else return res.status(401).send("You can only update your posts");
+    } else return res.status(403).send("You can only update your posts");
   } catch (err) {
     res.status(500).send("Faild to update post");
     console.log(err);
@@ -182,7 +182,7 @@ exports.deletePostById = async (req, res) => {
       blockBlobClient.delete({ deleteSnapshots: "include" });
 
       res.status(200).send(`Successfully deleted post with id: ${postId}`);
-    } else return res.status(401).send("You can only delete your posts");
+    } else return res.status(403).send("You can only delete your posts");
   } catch (err) {
     res.status(500).send("Faild to delete post");
     console.log(err);

@@ -96,7 +96,7 @@ exports.updateUser = async (req, res) => {
       result
         ? res.status(400).send(result)
         : res.status(200).send("User successfully updated");
-    } else return res.status(401).send("You can only update your account");
+    } else return res.status(403).send("You can only update your account");
   } catch (err) {
     res.status(500).send("Failed to update user");
     console.log(err);
@@ -114,7 +114,7 @@ exports.deleteUser = async (req, res) => {
     if (req.user._id === id) {
       await userModel.deleteUser(id);
       res.status(200).send(`Successfully deleted user with id : ${id}`);
-    } else return res.status(401).send("You can only delete your account");
+    } else return res.status(403).send("You can only delete your account");
   } catch (err) {
     res.status(500).send("Failed to delete user");
     console.log(err);

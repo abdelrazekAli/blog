@@ -1,36 +1,45 @@
-import React, { Component } from "react";
-import { Spinner, Container, Row, Col } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import Head from "../blog/Head";
+import { Spinner, Container, Row, Col, Image } from "react-bootstrap";
+import defaultImg from "../../assets/images/defaultImg.jpg";
 
-export class PostDetails extends Component {
-  state = { post: null };
-  componentDidMount() {
-    const postId = this.props.match.params.id
-      ? this.props.match.params.id
-      : null;
-    if (postId) {
-      axios
-        .get(`https://jsonplaceholder.typicode.com/posts/${postId}`)
-        .then((post) => this.setState({ post: post.data }));
-    }
-  }
-  render() {
-    return this.state.post ? (
-      <>
-        <Head title={this.state.post.title} />
-        <Container>
-          <Row className="m-4">
-            <Col className="col first-letter">{this.state.post.body}</Col>
-          </Row>
-        </Container>
-      </>
-    ) : (
-      <div className="d-flex justify-content-center m-4">
-        <Spinner animation="border" role="status" />
-      </div>
-    );
-  }
-}
+const PostDetails = (props) => {
+  const path = useLocation().pathname.split("/")[2];
+  const [post, setPost] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const res = await axios.get(`/posts/${path}`);
+      setPost(res.data);
+    };
+    fetchPost();
+  }, [path]);
+
+  return post ? (
+    <Container className="text-center">
+      <h3>{post.title}</h3>
+      <Row className="justify-content-center">
+        <Col xs={6} md={6}>
+          <Image
+            src={
+              post.postImg
+                ? `https://azstorageabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
+                : defaultImg
+            }
+            fluid
+          />
+        </Col>
+      </Row>
+      <p className="m-4 col first-letter">{post.body}</p>
+      <h6>Author: {post.createdBy.username}</h6>
+      <h6>Created at: {new Date(post.createdAt).toDateString()}</h6>
+    </Container>
+  ) : (
+    <div className="d-flex justify-content-center m-4">
+      <Spinner animation="border" role="status" />
+    </div>
+  );
+};
 
 export default PostDetails;

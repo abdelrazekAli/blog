@@ -1,11 +1,11 @@
 import Head from "../components/blog/Head";
-import Home from "../components/Home";
+import Blog from "../views/Blog";
 
 const Land = () => {
   return (
     <div>
       <Head />
-      <Home />
+      <Blog />
     </div>
   );
 };

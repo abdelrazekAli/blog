@@ -5,7 +5,7 @@ export const Header = () => {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
       <Container>
-        <Navbar.Brand href="#home">React Bolg</Navbar.Brand>
+        <Navbar.Brand href="#home">Mern Blog</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse
           id="responsive-navbar-nav"
@@ -15,7 +15,7 @@ export const Header = () => {
             <NavLink className="nav-link" exact to="/">
               home
             </NavLink>
-            <NavLink
+            {/* <NavLink
               className="nav-link"
               to={{
                 pathname: "/blog",
@@ -24,7 +24,7 @@ export const Header = () => {
               }}
             >
               blog
-            </NavLink>
+            </NavLink> */}
             <NavLink className="nav-link" to="/posts/add-post">
               add post
             </NavLink>

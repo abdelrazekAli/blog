@@ -1,4 +1,4 @@
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import defaultImg from "../../assets/images/defaultImg.jpg";
 
@@ -16,23 +16,43 @@ const Post = ({ post, onShow }) => {
 
   return (
     <Card className="mb-4">
-      <Card.Img variant="top" src={defaultImg} />
+      <Link to={`/posts/${post._id}`}>
+        <Card.Img
+          variant="top"
+          src={
+            post.postImg
+              ? `https://azstorageabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
+              : defaultImg
+          }
+        />
+      </Link>
       <Card.Body>
-        <Card.Title>{post.title}</Card.Title>
-        <Card.Text>{cutString()}</Card.Text>
-        <Link
-          className="btn btn-primary"
-          style={{ marginRight: "5px" }}
-          to={`/posts/${post.id}`}
-        >
-          Open Post
-        </Link>
-        <Button variant="primary" onClick={() => onShow(post)}>
-          Open Modal
-        </Button>
-        <Link className="username-link" to={"/profile"}>
-          username
-        </Link>
+        <div className="px-1 text-center">
+          <Card.Title>{post.title}</Card.Title>
+          <Card.Text>{cutString()}</Card.Text>
+        </div>
+        <ListGroup variant="flush">
+          <ListGroup.Item>
+            {new Date(post.createdAt).toDateString()}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <Link className="username-link" to={"/profile"}>
+              {post.createdBy.username}
+            </Link>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <Link
+              className="btn btn-primary"
+              style={{ marginRight: "5px" }}
+              to={`/posts/${post._id}`}
+            >
+              Open Post
+            </Link>
+            <Button variant="primary" onClick={() => onShow(post)}>
+              Open Modal
+            </Button>
+          </ListGroup.Item>
+        </ListGroup>
       </Card.Body>
     </Card>
   );

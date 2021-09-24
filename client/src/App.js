@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
-import Blog from "./views/Blog";
 import Land from "./views/Land";
 import About from "./views/About";
 import PostView from "./views/PostView";
@@ -23,7 +22,7 @@ const App = () => {
         <Header />
         <Switch>
           <Route path="/" exact component={Land} />
-          <Route path="/blog" component={Blog} />
+          {/* <Route path="/blog" component={Blog} /> */}
           <Route path="/about" component={About} />
           <Route path="/edit-profile" component={EditProfile} />
           <Route path="/profile" component={Profile} />

@@ -1,32 +1,26 @@
-import React, { Component } from "react";
-import axios from "axios";
+import { useState } from "react";
 import Post from "./Post";
-import { Row, Col, Container, Spinner } from "react-bootstrap";
 import PostModal from "./PostModal";
+import { Row, Col, Container, Spinner } from "react-bootstrap";
 
-export class Posts extends Component {
-  state = { posts: [], showModal: false, modalData: {} };
+const Posts = ({ posts }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({});
 
-  componentDidMount() {
-    axios.get("https://jsonplaceholder.typicode.com/posts").then((res) => {
-      this.setState({ posts: res.data });
-    });
-  }
-
-  showModalFun = (post) => {
-    this.setState({ modalData: post });
-    this.setState({ showModal: true });
+  const showModalFun = (post) => {
+    setShowModal(true);
+    setModalData(post);
   };
 
-  hideModal = () => {
-    this.setState({ showModal: false });
+  const hideModal = () => {
+    setShowModal(false);
   };
 
-  renderPosts = () => {
-    return this.state.posts.length > 0 ? (
-      this.state.posts.map((post) => (
-        <Col md={6} lg={4} key={post.id}>
-          <Post post={post} onShow={this.showModalFun} />
+  const renderPosts = () => {
+    return posts.length > 0 ? (
+      posts.map((post) => (
+        <Col md={6} lg={4} key={post._id}>
+          <Post post={post} onShow={showModalFun} />
         </Col>
       ))
     ) : (
@@ -34,21 +28,19 @@ export class Posts extends Component {
     );
   };
 
-  render() {
-    return (
-      <Container>
-        <h2 id="posts" className="h3 border-bottom mb-4 pb-4 text-primary">
-          Posts
-        </h2>
-        <Row className="justify-content-center g-4">{this.renderPosts()}</Row>
-        <PostModal
-          showModal={this.state.showModal}
-          hideModal={this.hideModal}
-          modalData={this.state.modalData}
-        />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <h2 id="posts" className="h3 border-bottom mb-4 pb-4 text-primary">
+        Posts
+      </h2>
+      <Row className="justify-content-center g-4">{renderPosts()}</Row>
+      <PostModal
+        showModal={showModal}
+        hideModal={hideModal}
+        modalData={modalData}
+      />
+    </Container>
+  );
+};
 
 export default Posts;
