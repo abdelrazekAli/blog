@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const auth = require("./guards/auth.guard");
-const admin = require("./guards/admin.guard");
+
+// Import user controllers
 const {
   getUsers,
   getUser,
@@ -15,6 +16,6 @@ router.get("/:id", getUser);
 router.post("/", createNewUser);
 router.post("/login", login);
 router.put("/:id", auth, updateUser);
-router.delete("/:id", auth, admin, deleteUser);
+router.delete("/:id", auth, deleteUser);
 
 module.exports = router;

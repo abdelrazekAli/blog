@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
-const ObjectId = require("mongoose").Types.ObjectId;
 const bcrypt = require("bcrypt");
 const DB_URL = process.env.DB_URL;
+const mongoose = require("mongoose");
+const { Post } = require("./post.model");
+const ObjectId = require("mongoose").Types.ObjectId;
 const connectOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const userSchema = mongoose.Schema(
@@ -87,6 +88,9 @@ exports.deleteUser = async (id) => {
   try {
     await mongoose.connect(DB_URL, connectOptions);
     await User.findByIdAndDelete(id);
+
+    // Delete user posts
+    await Post.deleteMany({ createdBy: id });
   } catch (err) {
     mongoose.disconnect();
     throw new Error(err);

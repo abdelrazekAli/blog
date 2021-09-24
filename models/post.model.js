@@ -1,6 +1,6 @@
+const DB_URL = process.env.DB_URL;
 const mongoose = require("mongoose");
 const ObjectId = require("mongoose").Types.ObjectId;
-const DB_URL = process.env.DB_URL;
 const connectOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const postSchema = mongoose.Schema(
@@ -15,11 +15,28 @@ const postSchema = mongoose.Schema(
 );
 
 const Post = mongoose.model("post", postSchema);
+exports.Post = Post;
 
 exports.getAllPosts = async () => {
   try {
     await mongoose.connect(DB_URL, connectOptions);
     let posts = await Post.find({}).populate({
+      path: "createdBy",
+      model: "user",
+      select: "username email",
+    });
+    mongoose.disconnect();
+    return posts;
+  } catch (err) {
+    mongoose.disconnect();
+    throw new Error(err);
+  }
+};
+
+exports.getUserPosts = async (userId) => {
+  try {
+    await mongoose.connect(DB_URL, connectOptions);
+    let posts = await Post.find({ createdBy: userId }).populate({
       path: "createdBy",
       model: "user",
       select: "username email",
@@ -67,14 +84,13 @@ exports.createNewPost = async (title, body, postImg, createdBy) => {
   }
 };
 
-exports.updatePost = async (id, title, body, postImg, createdBy) => {
+exports.updatePost = async (id, title, body, postImg) => {
   try {
     await mongoose.connect(DB_URL, connectOptions);
     let post = await Post.findByIdAndUpdate(id, {
       title: title,
       body: body,
       postImg: postImg,
-      createdBy: createdBy,
     });
     mongoose.disconnect();
     return post;

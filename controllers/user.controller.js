@@ -51,8 +51,9 @@ exports.createNewUser = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    // Check email and password
     let { email, password } = req.body;
+
+    // Check email and password
     if (!email || !password)
       res.status(400).send("Email and password are required");
     let validationResult = userValidation(req.body);
@@ -69,10 +70,7 @@ exports.login = async (req, res) => {
       return res.status(400).send("Invalid email or password");
 
     // Create and assign a token
-    let token = jwt.sign(
-      { _id: user._id, isAdmin: user.isAdmin },
-      process.env.JWT_TOKEN_SECRET
-    );
+    let token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN_SECRET);
     res.header("auth-token", token).json({ token: token });
   } catch (err) {
     res.status(500).send("Faild to login");
@@ -83,18 +81,22 @@ exports.login = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     let id = req.params.id;
+
+    // Check user id
     let checkResult = await userModel.checkId(id);
     if (checkResult) return res.status(400).send(checkResult);
 
-    let { username, email } = req.body;
-    let validationResult = userValidation(req.body);
-    if (validationResult)
-      return res.status(400).send(validationResult.details[0].message);
+    if (req.user._id === id) {
+      let { username, email } = req.body;
+      let validationResult = userValidation(req.body);
+      if (validationResult)
+        return res.status(400).send(validationResult.details[0].message);
 
-    let result = await userModel.updateUser(id, username, email);
-    result
-      ? res.status(400).send(result)
-      : res.status(200).send("User successfully updated");
+      let result = await userModel.updateUser(id, username, email);
+      result
+        ? res.status(400).send(result)
+        : res.status(200).send("User successfully updated");
+    } else return res.status(401).send("You can only update your account");
   } catch (err) {
     res.status(500).send("Failed to update user");
     console.log(err);
@@ -104,11 +106,15 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     let id = req.params.id;
+
+    // Check user id
     let checkResult = await userModel.checkId(id);
     if (checkResult) return res.status(400).send(checkResult);
 
-    await userModel.deleteUser(id);
-    res.status(200).send(`Successfully deleted user with id : ${id}`);
+    if (req.user._id === id) {
+      await userModel.deleteUser(id);
+      res.status(200).send(`Successfully deleted user with id : ${id}`);
+    } else return res.status(401).send("You can only delete your account");
   } catch (err) {
     res.status(500).send("Failed to delete user");
     console.log(err);
