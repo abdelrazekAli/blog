@@ -21,7 +21,7 @@ export class PostDetails extends Component {
         <Head title={this.state.post.title} />
         <Container>
           <Row className="m-4">
-            <Col className="col">{this.state.post.body}</Col>
+            <Col className="col first-letter">{this.state.post.body}</Col>
           </Row>
         </Container>
       </>

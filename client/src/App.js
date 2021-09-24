@@ -3,7 +3,10 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import Blog from "./views/Blog";
 import Land from "./views/Land";
+import About from "./views/About";
 import PostView from "./views/PostView";
+import Profile from "./views/Profile";
+import EditProfile from "./views/EditProfile";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import NotFound from "./components/NotFound";
@@ -21,6 +24,9 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={Land} />
           <Route path="/blog" component={Blog} />
+          <Route path="/about" component={About} />
+          <Route path="/edit-profile" component={EditProfile} />
+          <Route path="/profile" component={Profile} />
           {isAdmin ? (
             <Route
               path="/posts/add-post"

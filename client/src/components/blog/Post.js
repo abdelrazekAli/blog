@@ -30,6 +30,9 @@ const Post = ({ post, onShow }) => {
         <Button variant="primary" onClick={() => onShow(post)}>
           Open Modal
         </Button>
+        <Link className="username-link" to={"/profile"}>
+          username
+        </Link>
       </Card.Body>
     </Card>
   );

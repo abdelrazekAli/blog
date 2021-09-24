@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export const Header = () => {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
       <Container>
         <Navbar.Brand href="#home">React Bolg</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -13,7 +13,7 @@ export const Header = () => {
         >
           <Nav className="">
             <NavLink className="nav-link" exact to="/">
-              Home
+              home
             </NavLink>
             <NavLink
               className="nav-link"
@@ -23,10 +23,16 @@ export const Header = () => {
                 // search: "?page=1&id=3",
               }}
             >
-              Blog
+              blog
             </NavLink>
             <NavLink className="nav-link" to="/posts/add-post">
-              Add Post
+              add post
+            </NavLink>
+            <NavLink className="nav-link" to="/edit-profile">
+              profile
+            </NavLink>
+            <NavLink className="nav-link" to="/about">
+              about
             </NavLink>
           </Nav>
         </Navbar.Collapse>

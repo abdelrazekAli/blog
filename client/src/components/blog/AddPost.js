@@ -115,6 +115,7 @@ const AddPost = (props) => {
                 name="title"
                 className={titleStyle()}
                 onBlur={checkTitleValidation}
+                autoFocus
               />
               {titleValid.msg && (
                 <small className="text-danger p-1">{titleValid.msg}</small>

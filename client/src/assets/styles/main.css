@@ -7,3 +7,21 @@
   background-position: center bottom;
   background-attachment: fixed;
 }
+
+.nav-link {
+  text-transform: uppercase;
+}
+
+.first-letter::first-letter {
+  font-size: 30px;
+  font-weight: 600;
+  margin-left: 20px;
+}
+
+.username-link {
+  display: block;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #7b8a8b;
+  padding-top: 5px;
+}
