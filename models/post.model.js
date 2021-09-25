@@ -1,6 +1,6 @@
-const DB_URL = process.env.DB_URL;
+const { DB_URL } = process.env;
 const mongoose = require("mongoose");
-const ObjectId = require("mongoose").Types.ObjectId;
+const { ObjectId } = require("mongoose").Types;
 const connectOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const postSchema = mongoose.Schema(

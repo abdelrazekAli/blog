@@ -14,7 +14,7 @@ import NotFound from "./components/NotFound";
 const AddPost = React.lazy(() => import("./components/blog/AddPost"));
 
 const App = () => {
-  const isAdmin = true; //Admin Guard
+  const isUser = true; //Admin Guard
   return (
     <>
       {/* Using basename="/app" to avoid server problems */}
@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/about" component={About} />
           <Route path="/edit-profile" component={EditProfile} />
           <Route path="/profile" component={Profile} />
-          {isAdmin ? (
+          {isUser ? (
             <Route
               path="/posts/add-post"
               render={(props) => {

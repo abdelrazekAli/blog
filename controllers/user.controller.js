@@ -1,7 +1,10 @@
-const userModel = require("../models/user.model");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { JWT_TOKEN_SECRET } = process.env;
 const { userValidation } = require("../utils/validation");
+const generateAccessToken = require("../utils/token");
+const userModel = require("../models/user.model");
+const tokenModel = require("../models/token.model");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -70,10 +73,56 @@ exports.login = async (req, res) => {
       return res.status(400).send("Invalid email or password");
 
     // Create and assign a token
-    let token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN_SECRET);
-    res.header("auth-token", token).json({ token: token });
+    let accessToken = generateAccessToken({ _id: user._id });
+    let refreshToken = jwt.sign({ _id: user._id }, JWT_TOKEN_SECRET);
+
+    // Save refresh toen to database
+    await tokenModel.createNewToken(refreshToken);
+
+    res
+      .header("auth-token", accessToken)
+      .json({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (err) {
     res.status(500).send("Faild to login");
+    console.log(err);
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).send("token is required");
+
+    // Check token in database
+    let result = await tokenModel.checkToken(token);
+    if (result.length === 0) return res.status(403).send("Invalid token");
+
+    // Delete token from database
+    await tokenModel.deleteToken(token);
+
+    res.status(200).send("Successfully logout");
+  } catch (err) {
+    res.status(500).send("Failed to logout");
+    console.log(err);
+  }
+};
+
+exports.refreshToken = async (req, res) => {
+  const refreshToken = req.body.token;
+  try {
+    if (!refreshToken) return res.status(400).send("token is required");
+
+    // Check token in database
+    let token = await tokenModel.checkToken(refreshToken);
+    if (token.length === 0) return res.status(403).send("Invalid token");
+
+    jwt.verify(refreshToken, JWT_TOKEN_SECRET, (err, user) => {
+      if (err) return res.status(403).send("Invalid token");
+      const accessToken = generateAccessToken({ _id: user._id });
+      res.status(200).send({ accessToken: accessToken });
+    });
+  } catch (err) {
+    res.status(500).send("Failed to refresh token");
     console.log(err);
   }
 };

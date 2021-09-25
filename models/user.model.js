@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
-const DB_URL = process.env.DB_URL;
+const { DB_URL } = process.env;
 const mongoose = require("mongoose");
 const { Post } = require("./post.model");
-const ObjectId = require("mongoose").Types.ObjectId;
+const { ObjectId } = require("mongoose").Types;
 const connectOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const userSchema = mongoose.Schema(
   {
     username: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
     isAdmin: {
       type: Boolean,
@@ -50,7 +50,9 @@ exports.createNewUser = async (username, email, password) => {
     let emailCheck = await User.findOne({ email: email });
     if (emailCheck) return "Email is already used";
     else {
+      //Encrypt user password
       let hashedPassword = await bcrypt.hash(password, 10);
+
       let newUser = new User({
         username: username,
         email: email,

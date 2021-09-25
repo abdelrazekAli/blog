@@ -5,6 +5,7 @@ const About = () => {
     <>
       <Head title="About us" />
       <p>About page</p>
+      <p>developer contact information</p>
     </>
   );
 };

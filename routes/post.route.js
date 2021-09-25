@@ -11,7 +11,6 @@ const {
   createNewPost,
   updatePost,
   deletePostById,
-  deleteAllPosts,
 } = require("../controllers/post.contoller");
 
 router.get("/", getPosts);

@@ -26,7 +26,7 @@ export const Header = () => {
               blog
             </NavLink> */}
             <NavLink className="nav-link" to="/posts/add-post">
-              add post
+              write
             </NavLink>
             <NavLink className="nav-link" to="/edit-profile">
               profile
