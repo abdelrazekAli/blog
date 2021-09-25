@@ -100,7 +100,7 @@ exports.logout = async (req, res) => {
     // Delete token from database
     await tokenModel.deleteToken(token);
 
-    res.status(200).send("Successfully logout");
+    res.status(204).send("Successfully logout");
   } catch (err) {
     res.status(500).send("Failed to logout");
     console.log(err);
