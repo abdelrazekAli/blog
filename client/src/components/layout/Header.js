@@ -31,6 +31,12 @@ export const Header = () => {
             <NavLink className="nav-link" to="/edit-profile">
               profile
             </NavLink>
+            <NavLink className="nav-link" to="/login">
+              login
+            </NavLink>
+            <NavLink className="nav-link" to="/register">
+              register
+            </NavLink>
             <NavLink className="nav-link" to="/about">
               about
             </NavLink>

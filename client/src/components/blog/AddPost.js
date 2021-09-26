@@ -107,7 +107,7 @@ const AddPost = (props) => {
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
           <h2 className=" text-center h4 m-3 text-secondary">Add Post</h2>
           <Form onSubmit={addPostHandler}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label>Post title</Form.Label>
               <Form.Control
                 type="text"

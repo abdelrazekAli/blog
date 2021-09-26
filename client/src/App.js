@@ -3,8 +3,10 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import Land from "./views/Land";
 import About from "./views/About";
-import PostView from "./views/PostView";
+import Login from "./views/Login";
 import Profile from "./views/Profile";
+import Register from "./views/Register";
+import PostView from "./views/PostView";
 import EditProfile from "./views/EditProfile";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
@@ -26,6 +28,8 @@ const App = () => {
           <Route path="/about" component={About} />
           <Route path="/edit-profile" component={EditProfile} />
           <Route path="/profile" component={Profile} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           {isUser ? (
             <Route
               path="/posts/add-post"
