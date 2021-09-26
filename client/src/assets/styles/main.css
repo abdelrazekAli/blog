@@ -47,3 +47,8 @@ body {
   padding-left: 1rem !important;
   padding-right: 1rem !important;
 }
+
+.white-link {
+  color: #fff !important;
+  text-decoration: none !important;
+}

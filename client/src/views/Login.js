@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import { Context } from "../context/Context";
 
 const Login = () => {
   const [emailValid, setEmailValid] = useState({
@@ -13,6 +15,8 @@ const Login = () => {
     isValid: false,
     msg: "",
   });
+
+  const { user, dispatch, isFetching } = useContext(Context);
 
   const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
@@ -59,16 +63,19 @@ const Login = () => {
     setPasswordValid({ ...valids });
   };
 
-  const addPostHandler = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    dispatch({ type: "LOGIN_START" });
     let email = e.target.email.value,
       password = e.target.password.value;
-    if (emailValid.isValid && passwordValid.isValid) {
-      console.log({ email, password });
-      // setisLoading(true);
-      // let res = await sendPost({ username, email });
-      // console.log(res);
-      // e.target.reset();
+    try {
+      if (emailValid.isValid && passwordValid.isValid) {
+        let res = await axios.post("/users/login", { email, password });
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      }
+    } catch (err) {
+      dispatch({ type: "LOGIN_FAILURE" });
+      console.log(err);
     }
   };
 
@@ -93,7 +100,7 @@ const Login = () => {
       <Row>
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
           <h2 className=" text-center h4 m-3 text-secondary">Login</h2>
-          <Form onSubmit={addPostHandler}>
+          <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -113,7 +120,7 @@ const Login = () => {
                 type="password"
                 placeholder="Enter password"
                 name="password"
-                onBlur={checkPasswordValidation}
+                onKeyUp={checkPasswordValidation}
                 className={passwordStyle()}
               />
               {passwordValid.msg && (

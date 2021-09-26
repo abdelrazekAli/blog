@@ -3,6 +3,6 @@ const { JWT_TOKEN_SECRET } = process.env;
 
 module.exports = (userData) => {
   return jwt.sign(userData, JWT_TOKEN_SECRET, {
-    expiresIn: "30s",
+    expiresIn: "5s",
   });
 };

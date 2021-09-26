@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import axios from "axios";
 
 const Register = () => {
   const [usernameValid, setUsernameValid] = useState({
@@ -19,6 +20,13 @@ const Register = () => {
     isValid: false,
     msg: "",
   });
+
+  const [error, setError] = useState({
+    isError: false,
+    msg: "",
+  });
+
+  const [isLoading, setisLoading] = useState(false);
 
   const checkUsernameValidation = (e) => {
     let val = e.target.value.trim();
@@ -85,17 +93,36 @@ const Register = () => {
     setPasswordValid({ ...valids });
   };
 
-  const addPostHandler = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+
+    setisLoading(true);
+    setError({ isError: false, msg: "" });
+
     let username = e.target.username.value,
       email = e.target.email.value,
       password = e.target.password.value;
-    if (emailValid.isValid && passwordValid.isValid) {
-      console.log({ username, email, password });
-      // setisLoading(true);
-      // let res = await sendPost({ username, email, password });
-      // console.log(res);
-      // e.target.reset();
+
+    try {
+      if (
+        usernameValid.isValid &&
+        emailValid.isValid &&
+        passwordValid.isValid
+      ) {
+        let res = await axios.post("/users", { username, email, password });
+        if (res.data) {
+          window.location.replace("/app/login");
+          setisLoading(false);
+        }
+        // e.target.reset();
+      }
+    } catch (err) {
+      setisLoading(false);
+      if (err.response.status === 409) {
+        setError({ isError: true, msg: "Email is already used" });
+      } else {
+        setError({ isError: true, msg: "Somthing went wrong!" });
+      }
     }
   };
 
@@ -128,7 +155,7 @@ const Register = () => {
       <Row>
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
           <h2 className=" text-center h4 m-3 text-secondary">Register</h2>
-          <Form onSubmit={addPostHandler}>
+          <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -161,7 +188,7 @@ const Register = () => {
                 type="password"
                 placeholder="Enter password"
                 name="password"
-                onBlur={checkPasswordValidation}
+                onKeyUp={checkPasswordValidation}
                 className={passwordStyle()}
               />
               {passwordValid.msg && (
@@ -172,10 +199,19 @@ const Register = () => {
               variant="primary"
               type="submit"
               className="w-100"
-              disabled={!emailValid.isValid || !passwordValid.isValid}
+              disabled={
+                !usernameValid.isValid ||
+                !emailValid.isValid ||
+                !passwordValid.isValid
+              }
             >
-              Register
+              {isLoading ? "Loading ..." : "Register"}
             </Button>
+            {error.isError && (
+              <div className="alert alert-danger text-center my-2">
+                {error.msg}
+              </div>
+            )}
           </Form>
         </Col>
       </Row>

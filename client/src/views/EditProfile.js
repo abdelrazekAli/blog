@@ -59,7 +59,7 @@ const EditProfile = () => {
     setEmailValid({ ...valids });
   };
 
-  const addPostHandler = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     let username = e.target.username.value,
       email = e.target.email.value;
@@ -93,7 +93,7 @@ const EditProfile = () => {
       <Row>
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
           <h2 className=" text-center h4 m-3 text-secondary">Update Profile</h2>
-          <Form onSubmit={addPostHandler}>
+          <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control

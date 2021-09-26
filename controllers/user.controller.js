@@ -44,7 +44,7 @@ exports.createNewUser = async (req, res) => {
 
     let result = await userModel.createNewUser(username, email, password);
     result
-      ? res.status(400).send(`email : ${email} is already used`)
+      ? res.status(409).send(`email : ${email} is already used`)
       : res.status(200).send("User successfully added");
   } catch (err) {
     res.status(500).send("Failed to create new user");
@@ -81,7 +81,11 @@ exports.login = async (req, res) => {
 
     res
       .header("auth-token", accessToken)
-      .json({ accessToken: accessToken, refreshToken: refreshToken });
+      .json({
+        username: user.username,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      });
   } catch (err) {
     res.status(500).send("Faild to login");
     console.log(err);

@@ -12,6 +12,7 @@ const Blog = () => {
     };
     fetchPosts();
   }, []);
+
   return (
     <div>
       <Posts posts={posts} />

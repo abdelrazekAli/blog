@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/users", userRouter);
 app.all("*", (req, res) =>
-  res.send("You've tried reaching a route that doesn't exist.")
+  res.status(404).send("You've tried reaching a route that doesn't exist.")
 );
 
 const PORT = process.env.PORT || 5000;
