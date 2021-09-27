@@ -82,6 +82,7 @@ exports.login = async (req, res) => {
     res.header("auth-token", accessToken).json({
       _id: user._id,
       username: user.username,
+      email: user.email,
       accessToken: accessToken,
       refreshToken: refreshToken,
     });
@@ -146,7 +147,7 @@ exports.updateUser = async (req, res) => {
 
       let result = await userModel.updateUser(id, username, email);
       result
-        ? res.status(400).send(result)
+        ? res.status(409).send(result)
         : res.status(200).send("User successfully updated");
     } else return res.status(403).send("You can only update your account");
   } catch (err) {

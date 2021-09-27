@@ -105,7 +105,7 @@ const AddPost = (props) => {
   };
 
   const axiosJWT = axios.create();
-  //This will run before every axios request to refresh token
+  //This will run before axios request to refresh token
   axiosJWT.interceptors.request.use(
     async (config) => {
       let currentDate = new Date();

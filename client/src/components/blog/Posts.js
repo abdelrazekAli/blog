@@ -33,12 +33,12 @@ const Posts = ({ posts }) => {
       <h2 id="posts" className="h3 border-bottom mb-4 pb-4 text-primary">
         Posts
       </h2>
-      <Row className="justify-content-center g-4">{renderPosts()}</Row>
       <PostModal
         showModal={showModal}
         hideModal={hideModal}
         modalData={modalData}
       />
+      <Row className="justify-content-center g-4">{renderPosts()}</Row>
     </Container>
   );
 };

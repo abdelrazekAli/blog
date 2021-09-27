@@ -1,7 +1,3 @@
-body {
-  transform: translatez(0);
-  -webkit-transform: translatez(0);
-}
 .head {
   min-height: 50vh;
   padding: 2rem 1rem;
@@ -51,4 +47,16 @@ body {
 .white-link {
   color: #fff !important;
   text-decoration: none !important;
+}
+
+.success-alert {
+  width: 22rem;
+  position: fixed;
+  right: 1rem;
+  top: 6rem;
+  z-index: 999;
+}
+
+.success-alert .f-1 {
+  font-size: 1.2rem;
 }

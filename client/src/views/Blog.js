@@ -7,8 +7,12 @@ const Blog = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("/posts");
-      setPosts(res.data);
+      try {
+        const res = await axios.get("/posts");
+        setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchPosts();
   }, []);

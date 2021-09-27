@@ -1,8 +1,12 @@
-import { Card, Button, ListGroup } from "react-bootstrap";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../../context/Context";
+import { Card, Button, ListGroup } from "react-bootstrap";
 import defaultImg from "../../assets/images/defaultImg.jpg";
 
-const Post = ({ post, onShow }) => {
+const Post = ({ post, onShow, userProfile, onDelete }) => {
   // Cut post body
   const cutString = () => {
     if (post.body.length < 150) return post.body;
@@ -48,9 +52,25 @@ const Post = ({ post, onShow }) => {
             >
               Open Post
             </Link>
-            <Button variant="primary" onClick={() => onShow(post)}>
-              Open Modal
-            </Button>
+            {!userProfile && (
+              <Button variant="primary" onClick={() => onShow(post)}>
+                Open Modal
+              </Button>
+            )}
+            {userProfile && (
+              <>
+                <Button
+                  variant="primary"
+                  onClick={() => onShow(post)}
+                  style={{ marginRight: "5px" }}
+                >
+                  Edit Post
+                </Button>
+                <Button variant="danger" onClick={() => onDelete(post)}>
+                  Delete Post
+                </Button>
+              </>
+            )}
           </ListGroup.Item>
         </ListGroup>
       </Card.Body>
