@@ -114,7 +114,6 @@ const Register = () => {
           window.location.replace("/app/login");
           setisLoading(false);
         }
-        // e.target.reset();
       }
     } catch (err) {
       setisLoading(false);

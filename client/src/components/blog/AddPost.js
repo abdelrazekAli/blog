@@ -1,9 +1,14 @@
-import { useState } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { useState, useContext } from "react";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import { Context } from "../../context/Context";
 
 const AddPost = (props) => {
   // const [title, setTitle] = useState("");
   // const [body, setBody] = useState("");
+
+  const { user, dispatch } = useContext(Context);
 
   const [titleValid, setTitleValid] = useState({
     touched: false,
@@ -17,9 +22,16 @@ const AddPost = (props) => {
     msg: "",
   });
 
+  const [image, setImage] = useState(null);
+
   const [isLoading, setisLoading] = useState(false);
 
   const [addSuccess, setaddSuccess] = useState(false);
+
+  const [error, setError] = useState({
+    isError: false,
+    msg: "",
+  });
 
   const checkTitleValidation = (e) => {
     let val = e.target.value.trim();
@@ -28,9 +40,9 @@ const AddPost = (props) => {
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Title is required.";
-    } else if (val.split(" ").length < 3) {
+    } else if (val.length < 3) {
       valids.isValid = false;
-      valids.msg = "Title must be more than 2 words.";
+      valids.msg = "Title must be more than 2 characters.";
     } else if (val.split(" ").length > 10) {
       valids.isValid = false;
       valids.msg = "Title must be less than 10 words.";
@@ -48,12 +60,12 @@ const AddPost = (props) => {
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Body is required.";
-    } else if (val.split(" ").length < 10) {
+    } else if (val.length < 5) {
       valids.isValid = false;
-      valids.msg = "Title must be more than 10 words.";
+      valids.msg = "Body must be more than 4 characters.";
     } else if (val.split(" ").length > 500) {
       valids.isValid = false;
-      valids.msg = "Title must be less than 500 words.";
+      valids.msg = "Body must be less than 500 words.";
     } else {
       valids.isValid = true;
       valids.msg = "";
@@ -77,28 +89,76 @@ const AddPost = (props) => {
     }
   };
 
-  const addPostHandler = async (e) => {
-    e.preventDefault();
-    let title = e.target.title.value,
-      body = e.target.body.value;
-    if (titleValid.isValid && bodyValid.isValid) {
-      setisLoading(true);
-      let res = await sendPost({ title, body });
-      console.log(res);
-      e.target.reset();
+  const refreshToken = async () => {
+    try {
+      const res = await axios.post("/users/refresh-token", {
+        token: user.refreshToken,
+      });
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: { ...user, accessToken: res.data.accessToken },
+      });
+      return res.data;
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const sendPost = (post) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(post);
-        setisLoading(false);
-        setaddSuccess(true);
-        // setTitle("");
-        // setBody("");
-      }, 2000);
-    });
+  const axiosJWT = axios.create();
+  //This will run before every axios request to refresh token
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      let currentDate = new Date();
+      const decodedToken = jwt_decode(user.accessToken);
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        const data = await refreshToken();
+        config.headers["auth-token"] = data.accessToken;
+      }
+      return config;
+    },
+    (err) => {
+      return Promise.reject(err);
+    }
+  );
+
+  const addPostHandler = async (e) => {
+    e.preventDefault();
+    try {
+      if (titleValid.isValid && bodyValid.isValid && image) {
+        let formData = new FormData();
+        formData.append("title", e.target.title.value);
+        formData.append("body", e.target.body.value);
+        formData.append("image", image);
+
+        setisLoading(true);
+
+        let res = await axiosJWT({
+          method: "post",
+          url: "/posts",
+          data: formData,
+          headers: {
+            "auth-token": user.accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        e.target.reset();
+        if (res.data) {
+          window.location.replace(`/app/posts/${res.data._id}`);
+          setisLoading(false);
+          setaddSuccess(true);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      setisLoading(false);
+      setaddSuccess(false);
+      if (err.response.status === 400) {
+        setError({ isError: true, msg: "Invalid inputs" });
+      } else {
+        setError({ isError: true, msg: "Somthing went wrong!" });
+      }
+    }
   };
 
   return (
@@ -138,11 +198,20 @@ const AddPost = (props) => {
                 <small className="text-danger p-1">{bodyValid.msg}</small>
               )}
             </Form.Group>
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Post image</Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                accept="image/png, image/jpeg, image/jpg, image/JPG, image/svg, image/webp"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+            </Form.Group>
             <Button
               variant="primary"
               type="submit"
               className="w-100"
-              disabled={!titleValid.isValid || !bodyValid.isValid}
+              disabled={!titleValid.isValid || !bodyValid.isValid || !image}
             >
               {isLoading ? "Loading ..." : "Add New Post"}
             </Button>

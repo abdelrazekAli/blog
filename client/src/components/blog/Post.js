@@ -37,7 +37,7 @@ const Post = ({ post, onShow }) => {
           </ListGroup.Item>
           <ListGroup.Item>
             <Link className="username-link" to={"/profile"}>
-              {post.createdBy.username}
+              {post.createdBy ? post.createdBy.username : "user"}
             </Link>
           </ListGroup.Item>
           <ListGroup.Item>

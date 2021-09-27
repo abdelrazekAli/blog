@@ -8,6 +8,7 @@ export const Header = () => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
+    window.location.replace("/app");
   };
 
   return (
@@ -37,25 +38,34 @@ export const Header = () => {
             >
               blog
             </NavLink> */}
-            <NavLink className="nav-link" to="/posts/add-post">
-              write
-            </NavLink>
-            <NavLink className="nav-link" to="/edit-profile">
-              profile
-            </NavLink>
-            <NavLink className="nav-link" to="/login">
-              login
-            </NavLink>
-            <span
-              className="nav-link"
-              style={{ cursor: "pointer" }}
-              onClick={handleLogout}
-            >
-              logout
-            </span>
-            <NavLink className="nav-link" to="/register">
-              register
-            </NavLink>
+            {!user ? (
+              <>
+                <NavLink className="nav-link" to="/login">
+                  login
+                </NavLink>
+
+                <NavLink className="nav-link" to="/register">
+                  register
+                </NavLink>
+              </>
+            ) : null}
+            {user ? (
+              <>
+                <NavLink className="nav-link" to="/posts/add-post">
+                  write
+                </NavLink>
+                <NavLink className="nav-link" to="/edit-profile">
+                  profile
+                </NavLink>
+                <span
+                  className="nav-link"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleLogout}
+                >
+                  logout
+                </span>
+              </>
+            ) : null}
             <NavLink className="nav-link" to="/about">
               about
             </NavLink>

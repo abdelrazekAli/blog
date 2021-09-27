@@ -20,7 +20,7 @@ const Posts = ({ posts }) => {
     return posts.length > 0 ? (
       posts.map((post) => (
         <Col md={6} lg={4} key={post._id}>
-          <Post post={post} onShow={showModalFun} />
+          <Post post={post} onShow={() => showModalFun(post)} />
         </Col>
       ))
     ) : (

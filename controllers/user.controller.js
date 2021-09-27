@@ -79,13 +79,12 @@ exports.login = async (req, res) => {
     // Save refresh toen to database
     await tokenModel.createNewToken(refreshToken);
 
-    res
-      .header("auth-token", accessToken)
-      .json({
-        username: user.username,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      });
+    res.header("auth-token", accessToken).json({
+      _id: user._id,
+      username: user.username,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
   } catch (err) {
     res.status(500).send("Faild to login");
     console.log(err);

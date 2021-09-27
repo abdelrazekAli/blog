@@ -16,7 +16,7 @@ const Login = () => {
     msg: "",
   });
 
-  const { user, dispatch, isFetching } = useContext(Context);
+  const { user, dispatch, isFetching, error } = useContext(Context);
 
   const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
@@ -72,6 +72,7 @@ const Login = () => {
       if (emailValid.isValid && passwordValid.isValid) {
         let res = await axios.post("/users/login", { email, password });
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+        window.location.replace("/app");
       }
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE" });
@@ -133,8 +134,13 @@ const Login = () => {
               className="w-100"
               disabled={!emailValid.isValid || !passwordValid.isValid}
             >
-              Login
+              {isFetching ? "Loading ..." : "Login"}
             </Button>
+            {error && (
+              <div className="alert alert-danger text-center my-2">
+                Invalid email or password
+              </div>
+            )}
           </Form>
         </Col>
       </Row>

@@ -19,7 +19,6 @@ import { Context } from "./context/Context";
 const AddPost = React.lazy(() => import("./components/blog/AddPost"));
 
 const App = () => {
-  const isUser = true;
   const { user, dispatch } = useContext(Context);
 
   const refreshToken = async () => {
@@ -61,13 +60,12 @@ const App = () => {
         <Header />
         <Switch>
           <Route path="/" exact component={Land} />
-          {/* <Route path="/blog" component={Blog} /> */}
           <Route path="/about" component={About} />
           <Route path="/edit-profile" component={EditProfile} />
           <Route path="/profile" component={Profile} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          {isUser ? (
+          {user ? (
             <Route
               path="/posts/add-post"
               render={(props) => {
@@ -81,7 +79,7 @@ const App = () => {
               }}
             />
           ) : (
-            <Redirect from="/posts/add-post" to="/" />
+            <Redirect from="/posts/add-post" to="/login" />
           )}
           <Route path="/posts/:id" component={PostView} />
           <Redirect from="/home" to="/" />
