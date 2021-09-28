@@ -67,7 +67,7 @@ export const Header = () => {
               </>
             ) : null}
             <NavLink className="nav-link" to="/about">
-              about
+              contact
             </NavLink>
           </Nav>
         </Navbar.Collapse>

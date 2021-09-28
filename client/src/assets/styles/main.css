@@ -60,3 +60,11 @@
 .success-alert .f-1 {
   font-size: 1.2rem;
 }
+
+a.col {
+  text-decoration: none;
+}
+
+.hover-opacity:hover {
+  opacity: 0.8;
+}

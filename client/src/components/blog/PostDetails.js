@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Spinner, Container, Row, Col, Image } from "react-bootstrap";
 import defaultImg from "../../assets/images/defaultImg.jpg";
 
 const PostDetails = (props) => {
-  const path = useLocation().pathname.split("/")[2];
+  const { id } = useParams();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await axios.get(`/posts/${path}`);
+      const res = await axios.get(`/posts/${id}`);
       setPost(res.data);
     };
     fetchPost();
-  }, [path]);
+  }, [id]);
 
   return post ? (
     <Container className="text-center">

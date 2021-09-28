@@ -1,12 +1,12 @@
-import axios from "axios";
-import jwt_decode from "jwt-decode";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Context } from "../../context/Context";
 import { Card, Button, ListGroup } from "react-bootstrap";
 import defaultImg from "../../assets/images/defaultImg.jpg";
+import { Context } from "../../context/Context";
 
 const Post = ({ post, onShow, userProfile, onDelete }) => {
+  const { user } = useContext(Context);
+
   // Cut post body
   const cutString = () => {
     if (post.body.length < 150) return post.body;
@@ -40,9 +40,23 @@ const Post = ({ post, onShow, userProfile, onDelete }) => {
             {new Date(post.createdAt).toDateString()}
           </ListGroup.Item>
           <ListGroup.Item>
-            <Link className="username-link" to={"/profile"}>
-              {post.createdBy ? post.createdBy.username : "user"}
-            </Link>
+            {user && user._id === post.createdBy._id ? (
+              <Link className="username-link" to="/edit-profile">
+                {post.createdBy ? post.createdBy.username : "user"}
+              </Link>
+            ) : (
+              <Link
+                className="username-link"
+                to={{
+                  pathname: `/profile/${post.createdBy._id}`,
+                  state: {
+                    username: post.createdBy.username,
+                  },
+                }}
+              >
+                {post.createdBy ? post.createdBy.username : "user"}
+              </Link>
+            )}
           </ListGroup.Item>
           <ListGroup.Item>
             <Link
@@ -59,13 +73,20 @@ const Post = ({ post, onShow, userProfile, onDelete }) => {
             )}
             {userProfile && (
               <>
-                <Button
-                  variant="primary"
-                  onClick={() => onShow(post)}
+                <Link
+                  className="btn btn-primary"
+                  to={{
+                    pathname: `/edit-post/${post._id}`,
+                    state: {
+                      postTitle: post.title,
+                      postBody: post.body,
+                      postImg: post.postImg,
+                    },
+                  }}
                   style={{ marginRight: "5px" }}
                 >
                   Edit Post
-                </Button>
+                </Link>
                 <Button variant="danger" onClick={() => onDelete(post)}>
                   Delete Post
                 </Button>

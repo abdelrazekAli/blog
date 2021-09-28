@@ -2,20 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import Post from "../components/blog/Post";
-import {
-  Button,
-  Container,
-  Form,
-  Row,
-  Col,
-  Spinner,
-  Alert,
-} from "react-bootstrap";
+import { Button, Container, Form, Row, Col, Alert } from "react-bootstrap";
 import { Context } from "../context/Context";
 import { Link } from "react-router-dom";
 
 const EditProfile = () => {
   const { user, dispatch } = useContext(Context);
+
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
 
@@ -57,7 +50,7 @@ const EditProfile = () => {
       }
     };
     fetchPosts();
-  }, [deleteSuccess]);
+  }, [deleteSuccess, user._id]);
 
   const refreshToken = async () => {
     try {
@@ -105,8 +98,8 @@ const EditProfile = () => {
     }
   };
   const checkUsernameValidation = (e) => {
-    setUsername(e.target.value.trim());
-    let val = e.target.value.trim();
+    let val = e.target.value;
+    setUsername(val);
     let valids = { ...usernameValid };
     valids.touched = true;
     if (val.length <= 0) {
@@ -131,8 +124,8 @@ const EditProfile = () => {
   };
 
   const checkEmailValidation = (e) => {
-    setEmail(e.target.value.trim());
-    let val = e.target.value.trim();
+    let val = e.target.value;
+    setEmail(val);
     let valids = { ...emailValid };
     valids.touched = true;
     if (val.length <= 0) {

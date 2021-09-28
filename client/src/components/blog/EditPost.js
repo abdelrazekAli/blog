@@ -1,26 +1,30 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useState, useContext } from "react";
-import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
 import { Context } from "../../context/Context";
-
-const AddPost = (props) => {
-  // const [title, setTitle] = useState("");
-  // const [body, setBody] = useState("");
-
+import { useParams, useLocation } from "react-router";
+import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
+const EditPost = () => {
   const { user, dispatch } = useContext(Context);
 
+  const postId = useParams().id;
+
+  const location = useLocation();
+  const { postTitle, postBody, postImg } = location.state;
   const [titleValid, setTitleValid] = useState({
     touched: false,
-    isValid: false,
+    isValid: true,
     msg: "",
   });
 
   const [bodyValid, setBodyValid] = useState({
     touched: false,
-    isValid: false,
+    isValid: true,
     msg: "",
   });
+
+  const [title, setTitle] = useState(postTitle);
+  const [body, setBody] = useState(postBody);
 
   const [image, setImage] = useState(null);
 
@@ -34,7 +38,8 @@ const AddPost = (props) => {
   });
 
   const checkTitleValidation = (e) => {
-    let val = e.target.value.trim();
+    let val = e.target.value;
+    setTitle(val);
     let valids = { ...titleValid };
     valids.touched = true;
     if (val.length <= 0) {
@@ -54,7 +59,8 @@ const AddPost = (props) => {
   };
 
   const checkBodyValidation = (e) => {
-    let val = e.target.value.trim();
+    let val = e.target.value;
+    setBody(val);
     let valids = { ...bodyValid };
     valids.touched = true;
     if (val.length <= 0) {
@@ -124,27 +130,25 @@ const AddPost = (props) => {
   const addPostHandler = async (e) => {
     e.preventDefault();
     try {
-      if (titleValid.isValid && bodyValid.isValid && image) {
+      if (titleValid.isValid && bodyValid.isValid) {
         let formData = new FormData();
-        formData.append("title", e.target.title.value);
-        formData.append("body", e.target.body.value);
-        formData.append("image", image);
-
+        formData.append("title", title);
+        formData.append("body", body);
+        image && formData.append("image", image);
+        console.log(title, body, image);
         setisLoading(true);
 
         let res = await axiosJWT({
-          method: "post",
-          url: "/posts",
+          method: "put",
+          url: `/posts/${postId}`,
           data: formData,
           headers: {
             "auth-token": user.accessToken,
             "Content-Type": "multipart/form-data",
           },
         });
-
-        e.target.reset();
+        console.log(res);
         if (res.data) {
-          window.location.replace(`/app/posts/${res.data._id}`);
           setisLoading(false);
           setaddSuccess(true);
         }
@@ -165,17 +169,16 @@ const AddPost = (props) => {
     <Container>
       <Row>
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
-          <h2 className=" text-center h4 m-3 text-secondary">Add Post</h2>
+          <h2 className=" text-center h4 m-3 text-secondary">Update Post</h2>
           <Form onSubmit={addPostHandler}>
             <Form.Group className="mb-3">
               <Form.Label>Post title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Title"
+                value={title}
                 name="title"
                 className={titleStyle()}
-                onBlur={checkTitleValidation}
-                autoFocus
+                onChange={checkTitleValidation}
               />
               {titleValid.msg && (
                 <small className="text-danger p-1">{titleValid.msg}</small>
@@ -189,6 +192,7 @@ const AddPost = (props) => {
               <Form.Label>Post body</Form.Label>
               <Form.Control
                 as="textarea"
+                value={body}
                 rows={3}
                 name="body"
                 className={bodyStyle()}
@@ -202,8 +206,13 @@ const AddPost = (props) => {
               <Form.Label>Post image</Form.Label>
               <div className="d-flex my-2 justify-content-center">
                 <Col xs={6} md={4}>
-                  {image && (
+                  {image ? (
                     <Image src={URL.createObjectURL(image)} thumbnail />
+                  ) : (
+                    <Image
+                      src={`https://azstorageabdelrazek.blob.core.windows.net/postimgs/${postImg}`}
+                      thumbnail
+                    />
                   )}
                 </Col>
               </div>
@@ -218,9 +227,9 @@ const AddPost = (props) => {
               variant="primary"
               type="submit"
               className="w-100"
-              disabled={!titleValid.isValid || !bodyValid.isValid || !image}
+              disabled={!titleValid.isValid || !bodyValid.isValid}
             >
-              {isLoading ? "Loading ..." : "Add New Post"}
+              {isLoading ? "Loading ..." : "Update Post"}
             </Button>
           </Form>
           {error.isError && (
@@ -230,7 +239,7 @@ const AddPost = (props) => {
           )}
           {addSuccess && (
             <div className="alert alert-success text-center my-2">
-              Post Added Successfully
+              Post Updated Successfully
             </div>
           )}
         </Col>
@@ -239,4 +248,4 @@ const AddPost = (props) => {
   );
 };
 
-export default AddPost;
+export default EditPost;
