@@ -17,7 +17,7 @@ const Posts = ({ posts }) => {
   };
 
   const renderPosts = () => {
-    return posts.length > 0 ? (
+    return posts && posts.length > 0 ? (
       posts.map((post) => (
         <Col md={6} lg={4} key={post._id}>
           <Post post={post} onShow={() => showModalFun(post)} />
