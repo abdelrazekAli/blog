@@ -19,7 +19,7 @@ const Post = ({ post, onShow, userProfile, onDelete }) => {
   };
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 mx-4 mx-lg-0">
       <Link to={`/posts/${post._id}`}>
         <Card.Img
           variant="top"
@@ -36,9 +36,6 @@ const Post = ({ post, onShow, userProfile, onDelete }) => {
           <Card.Text>{cutString()}</Card.Text>
         </div>
         <ListGroup variant="flush">
-          <ListGroup.Item>
-            {new Date(post.createdAt).toDateString()}
-          </ListGroup.Item>
           <ListGroup.Item>
             {user && user._id === post.createdBy._id ? (
               <Link className="username-link" to="/edit-profile">
@@ -57,6 +54,9 @@ const Post = ({ post, onShow, userProfile, onDelete }) => {
                 {post.createdBy ? post.createdBy.username : "user"}
               </Link>
             )}
+          </ListGroup.Item>
+          <ListGroup.Item>
+            {new Date(post.createdAt).toDateString()}
           </ListGroup.Item>
           <ListGroup.Item>
             <Link

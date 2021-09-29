@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import Post from "../components/blog/Post";
-import { Button, Container, Form, Row, Col, Alert } from "react-bootstrap";
-import { Context } from "../context/Context";
 import { Link } from "react-router-dom";
+import Post from "../components/blog/Post";
+import { Context } from "../context/Context";
+import { useState, useEffect, useContext } from "react";
+import { Button, Container, Form, Row, Col, Alert } from "react-bootstrap";
 
 const EditProfile = () => {
   const { user, dispatch } = useContext(Context);
@@ -28,7 +28,10 @@ const EditProfile = () => {
 
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({
+    isError: false,
+    isSuccess: false,
+  });
 
   const [updateForm, setUpdateForm] = useState(false);
   const [updateSuccess, setupdateSuccess] = useState(false);
@@ -91,10 +94,13 @@ const EditProfile = () => {
           "auth-token": user.accessToken,
         },
       });
-      setDeleteSuccess(!deleteSuccess);
-      setShowAlert(true);
+      if (res) {
+        setDeleteSuccess(!deleteSuccess);
+        setShowAlert({ isError: false, isSuccess: true });
+      }
     } catch (err) {
       console.log(err);
+      setShowAlert({ isError: true, isSuccess: false });
     }
   };
   const checkUsernameValidation = (e) => {
@@ -155,7 +161,16 @@ const EditProfile = () => {
           { username, email },
           { headers: { "auth-token": user.accessToken } }
         );
+
         if (res) {
+          dispatch({
+            type: "LOGIN_SUCCESS",
+            payload: {
+              ...user,
+              username: res.data.username,
+              email: res.data.email,
+            },
+          });
           setisLoading(false);
           setupdateSuccess(true);
         }
@@ -204,18 +219,39 @@ const EditProfile = () => {
 
   return (
     <Container>
-      {showAlert && (
+      {showAlert.isError && (
+        <Alert
+          variant="danger"
+          onClose={() =>
+            setShowAlert({
+              isError: false,
+              isSuccess: false,
+            })
+          }
+          className="success-alert"
+          dismissible
+        >
+          <Alert.Heading className="f-1">Somthing went wrong!</Alert.Heading>
+        </Alert>
+      )}
+      {showAlert.isSuccess && (
         <Alert
           variant="success"
-          onClose={() => setShowAlert(false)}
+          onClose={() =>
+            setShowAlert({
+              isError: false,
+              isSuccess: false,
+            })
+          }
           className="success-alert"
           dismissible
         >
           <Alert.Heading className="f-1">
-            Suceessfully deleted post
+            Post has been successfully deleted
           </Alert.Heading>
         </Alert>
       )}
+
       <Row>
         <Col md={6} lg={4} className=" mx-auto bg-light p-4 my-4 shadow-sm">
           {!updateForm && (
@@ -229,7 +265,6 @@ const EditProfile = () => {
               </Button>
             </div>
           )}
-          {/* <h2 className="text-center h4 m-3 text-secondary">Update Profile</h2> */}
           {updateForm && (
             <Form onSubmit={submitHandler}>
               <Form.Group className="mb-3">

@@ -1,58 +1,28 @@
 import React, { Suspense, useContext } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
+import { Context } from "./context/Context";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+
+// Import views
 import Land from "./views/Land";
 import About from "./views/About";
 import Login from "./views/Login";
 import Profile from "./views/Profile";
 import Register from "./views/Register";
 import PostView from "./views/PostView";
-import EditPost from "./components/blog/EditPost";
 import EditProfile from "./views/EditProfile";
+
+// Import components
+import EditPost from "./components/blog/EditPost";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import NotFound from "./components/NotFound";
-import { Context } from "./context/Context";
 
 // Lazy Loading
 const AddPost = React.lazy(() => import("./components/blog/AddPost"));
 
 const App = () => {
-  const { user, dispatch } = useContext(Context);
-
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post("users/refresh-token", {
-        token: user.refreshToken,
-      });
-      dispatch({
-        type: "LOGIN_SUCCESS",
-        payload: { ...user, accessToken: res.data.accessToken },
-      });
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const axiosJWT = axios.create();
-  //This will run before every axios request to refresh token
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      let currentDate = new Date();
-      const decodedToken = jwt_decode(user.accessToken);
-      if (decodedToken.exp * 1000 < currentDate.getTime()) {
-        const data = await refreshToken();
-        config.headers["auth-token"] = data.accessToken;
-      }
-      return config;
-    },
-    (err) => {
-      return Promise.reject(err);
-    }
-  );
+  const { user } = useContext(Context);
 
   return (
     <>

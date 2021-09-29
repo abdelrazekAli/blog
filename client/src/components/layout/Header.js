@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import axios from "axios";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import { NavLink, Link } from "react-router-dom";
 import { Context } from "../../context/Context";
@@ -6,9 +7,17 @@ import { Context } from "../../context/Context";
 export const Header = () => {
   const { user, dispatch } = useContext(Context);
 
-  const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
-    window.location.replace("/app");
+  const handleLogout = async () => {
+    try {
+      let res = await axios.post("/users/logout", { token: user.refreshToken });
+      if (res) {
+        dispatch({ type: "LOGOUT" });
+        window.location.replace("/app");
+      }
+    } catch (err) {
+      window.location.replace("/app");
+      console.log(err);
+    }
   };
 
   return (
@@ -28,16 +37,6 @@ export const Header = () => {
             <NavLink className="nav-link" exact to="/">
               home
             </NavLink>
-            {/* <NavLink
-              className="nav-link"
-              to={{
-                pathname: "/blog",
-                // hash: "#footer",
-                // search: "?page=1&id=3",
-              }}
-            >
-              blog
-            </NavLink> */}
             {!user ? (
               <>
                 <NavLink className="nav-link" to="/login">

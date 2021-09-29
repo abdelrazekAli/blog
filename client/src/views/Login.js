@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
 import axios from "axios";
-import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import { useContext, useState } from "react";
 import { Context } from "../context/Context";
+import { Button, Container, Form, Row, Col } from "react-bootstrap";
 
 const Login = () => {
   const [emailValid, setEmailValid] = useState({
@@ -16,7 +16,7 @@ const Login = () => {
     msg: "",
   });
 
-  const { user, dispatch, isFetching, error } = useContext(Context);
+  const { dispatch, isFetching, error } = useContext(Context);
 
   const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;

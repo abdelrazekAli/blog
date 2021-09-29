@@ -1,6 +1,6 @@
+import Blog from "../views/Blog";
 import { useContext } from "react";
 import Head from "../components/blog/Head";
-import Blog from "../views/Blog";
 import { Context } from "../context/Context";
 
 const Land = () => {

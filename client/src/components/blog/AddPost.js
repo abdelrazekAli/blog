@@ -1,8 +1,8 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { useState, useContext } from "react";
-import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
 import { Context } from "../../context/Context";
+import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
 
 const AddPost = (props) => {
   // const [title, setTitle] = useState("");
@@ -129,6 +129,7 @@ const AddPost = (props) => {
         formData.append("title", e.target.title.value);
         formData.append("body", e.target.body.value);
         formData.append("image", image);
+        console.log(e.target.title.value, e.target.body.value, image);
 
         setisLoading(true);
 

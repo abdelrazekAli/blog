@@ -148,7 +148,7 @@ exports.updateUser = async (req, res) => {
       let result = await userModel.updateUser(id, username, email);
       result
         ? res.status(409).send(result)
-        : res.status(200).send("User successfully updated");
+        : res.status(200).send({ username, email });
     } else return res.status(403).send("You can only update your account");
   } catch (err) {
     res.status(500).send("Failed to update user");

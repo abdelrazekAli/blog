@@ -5,11 +5,10 @@ const PostModal = ({ showModal, hideModal, modalData }) => {
     <Modal show={showModal} size="lg" centered onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Post Details
+          {modalData.title}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>{modalData.title}</h4>
         <p>{modalData.body}</p>
       </Modal.Body>
       <Modal.Footer>

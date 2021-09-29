@@ -44,7 +44,6 @@ const Profile = () => {
           {username} posts
         </h2>
         <Row className="justify-content-center g-4">{renderPosts()}</Row>
-        <span>redirect him to edit profile page if he is the owner</span>
       </Container>
     </>
   );
