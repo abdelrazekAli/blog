@@ -35,9 +35,9 @@ const Register = () => {
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Username is required.";
-    } else if (val.length < 4) {
+    } else if (val.length < 3) {
       valids.isValid = false;
-      valids.msg = "Username must be more than 3 characters.";
+      valids.msg = "Username must be more than 2 characters.";
     } else if (val.length > 100) {
       valids.isValid = false;
       valids.msg = "Username must be less than 100 characters.";

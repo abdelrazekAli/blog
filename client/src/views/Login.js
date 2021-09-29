@@ -50,9 +50,6 @@ const Login = () => {
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Password is required.";
-    } else if (val.length < 4) {
-      valids.isValid = false;
-      valids.msg = "Password must be more than 3 characters.";
     } else if (val.length > 255) {
       valids.isValid = false;
       valids.msg = "Password must be less than 255 characters.";
