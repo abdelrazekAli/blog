@@ -50,7 +50,7 @@ const EditProfile = () => {
       }
     };
     fetchPosts();
-  }, [deleteSuccess, user._id]);
+  }, [deleteSuccess, user._id, updateSuccess]);
 
   const refreshToken = async () => {
     try {
@@ -209,7 +209,7 @@ const EditProfile = () => {
     ) : (
       // <Spinner animation="border" role="status" />
       <h5 className="my-4">
-        You do not have any posts, <Link to="/posts/add-post">Write now</Link>
+        You do not have any posts, <Link to="/add-post">Write now</Link>
       </h5>
     );
   };
