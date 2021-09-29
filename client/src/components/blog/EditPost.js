@@ -4,13 +4,20 @@ import { useState, useContext } from "react";
 import { Context } from "../../context/Context";
 import { useParams, useLocation } from "react-router";
 import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
+
 const EditPost = () => {
   const { user, dispatch } = useContext(Context);
 
   const postId = useParams().id;
-
   const location = useLocation();
   const { postTitle, postBody, postImg } = location.state;
+
+  const [title, setTitle] = useState(postTitle);
+  const [body, setBody] = useState(postBody);
+  const [image, setImage] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
+  const [addSuccess, setaddSuccess] = useState(false);
+
   const [titleValid, setTitleValid] = useState({
     touched: false,
     isValid: true,
@@ -22,16 +29,6 @@ const EditPost = () => {
     isValid: true,
     msg: "",
   });
-
-  const [title, setTitle] = useState(postTitle);
-  const [body, setBody] = useState(postBody);
-
-  const [image, setImage] = useState(null);
-
-  const [isLoading, setisLoading] = useState(false);
-
-  const [addSuccess, setaddSuccess] = useState(false);
-
   const [error, setError] = useState({
     isError: false,
     msg: "",
@@ -97,7 +94,7 @@ const EditPost = () => {
 
   const refreshToken = async () => {
     try {
-      const res = await axios.post("/users/refresh-token", {
+      const res = await axios.post("/api/v1/users/refresh-token", {
         token: user.refreshToken,
       });
       dispatch({
@@ -135,19 +132,18 @@ const EditPost = () => {
         formData.append("title", title);
         formData.append("body", body);
         image && formData.append("image", image);
-        console.log(title, body, image);
         setisLoading(true);
 
         let res = await axiosJWT({
           method: "put",
-          url: `/posts/${postId}`,
+          url: `/api/v1/posts/${postId}`,
           data: formData,
           headers: {
             "auth-token": user.accessToken,
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(res);
+
         if (res.data) {
           setisLoading(false);
           setaddSuccess(true);
@@ -184,7 +180,6 @@ const EditPost = () => {
                 <small className="text-danger p-1">{titleValid.msg}</small>
               )}
             </Form.Group>
-
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"

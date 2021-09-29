@@ -1,11 +1,25 @@
-import { useState } from "react";
+import axios from "axios";
 import Post from "./Post";
 import PostModal from "./PostModal";
+import { useState, useEffect } from "react";
 import { Row, Col, Container, Spinner } from "react-bootstrap";
 
-const Posts = ({ posts }) => {
-  const [showModal, setShowModal] = useState(false);
+const Posts = () => {
+  const [posts, setPosts] = useState([]);
   const [modalData, setModalData] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await axios.get("/api/v1/posts");
+        res && setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   const showModalFun = (post) => {
     setShowModal(true);
@@ -14,18 +28,6 @@ const Posts = ({ posts }) => {
 
   const hideModal = () => {
     setShowModal(false);
-  };
-
-  const renderPosts = () => {
-    return posts && posts.length > 0 ? (
-      posts.map((post) => (
-        <Col md={6} lg={4} key={post._id}>
-          <Post post={post} onShow={() => showModalFun(post)} />
-        </Col>
-      ))
-    ) : (
-      <Spinner animation="border" role="status" />
-    );
   };
 
   return (
@@ -38,7 +40,17 @@ const Posts = ({ posts }) => {
         hideModal={hideModal}
         modalData={modalData}
       />
-      <Row className="justify-content-center g-4">{renderPosts()}</Row>
+      <Row className="justify-content-center g-4">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <Col md={6} lg={4} key={post._id}>
+              <Post post={post} onShow={() => showModalFun(post)} />
+            </Col>
+          ))
+        ) : (
+          <Spinner className="my-4" animation="border" role="status" />
+        )}
+      </Row>
     </Container>
   );
 };

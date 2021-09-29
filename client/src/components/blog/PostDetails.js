@@ -24,7 +24,7 @@ const PostDetails = (props) => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await axios.get(`/posts/${id}`);
+      const res = await axios.get(`/api/v1/posts/${id}`);
       setPost(res.data);
     };
     fetchPost();
@@ -34,7 +34,7 @@ const PostDetails = (props) => {
   if (user) {
     const refreshToken = async () => {
       try {
-        const res = await axios.post("/users/refresh-token", {
+        const res = await axios.post("/api/v1/users/refresh-token", {
           token: user.refreshToken,
         });
         dispatch({
@@ -65,7 +65,7 @@ const PostDetails = (props) => {
   }
   const onDelete = async (postId) => {
     try {
-      let res = await axiosJWT.delete(`/posts/${postId}`, {
+      let res = await axiosJWT.delete(`/api/v1/posts/${postId}`, {
         headers: {
           "auth-token": user.accessToken,
         },

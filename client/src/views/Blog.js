@@ -1,25 +1,15 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import Head from "../components/blog/Head";
 import Posts from "../components/blog/Posts";
+import { Context } from "../context/Context";
 
 const Blog = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await axios.get("/posts");
-        setPosts(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const { user } = useContext(Context);
 
   return (
     <div>
-      <Posts posts={posts} />
+      <Head title={user && `Welcome ${user.username}, to our blog`} />
+      <Posts />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../../context/Context";
 import { Card, Button, ListGroup } from "react-bootstrap";
 import defaultImg from "../../assets/images/defaultImg.jpg";
-import { Context } from "../../context/Context";
 
 const Post = ({ post, onShow, userProfile, onDelete }) => {
   const { user } = useContext(Context);

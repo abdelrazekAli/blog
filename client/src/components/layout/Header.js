@@ -1,22 +1,23 @@
-import { useContext } from "react";
 import axios from "axios";
-import { Nav, Navbar, Container } from "react-bootstrap";
-import { NavLink, Link } from "react-router-dom";
+import { useContext } from "react";
 import { Context } from "../../context/Context";
+import { NavLink, Link } from "react-router-dom";
+import { Nav, Navbar, Container } from "react-bootstrap";
 
 export const Header = () => {
   const { user, dispatch } = useContext(Context);
 
   const handleLogout = async () => {
     try {
-      let res = await axios.post("/users/logout", { token: user.refreshToken });
+      let res = await axios.post("/api/v1/users/logout", {
+        token: user.refreshToken,
+      });
       if (res) {
         dispatch({ type: "LOGOUT" });
         window.location.replace("/app");
       }
     } catch (err) {
       window.location.replace("/app");
-      console.log(err);
     }
   };
 
@@ -42,7 +43,6 @@ export const Header = () => {
                 <NavLink className="nav-link" to="/login">
                   login
                 </NavLink>
-
                 <NavLink className="nav-link" to="/register">
                   register
                 </NavLink>
@@ -50,7 +50,7 @@ export const Header = () => {
             ) : null}
             {user ? (
               <>
-                <NavLink className="nav-link" to="/posts/add-post">
+                <NavLink className="nav-link" to="/add-post">
                   write
                 </NavLink>
                 <NavLink className="nav-link" to="/edit-profile">

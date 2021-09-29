@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
 import Head from "../components/blog/Head";
 import Post from "../components/blog/Post";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Container, Row, Spinner, Col } from "react-bootstrap";
 
@@ -15,7 +15,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`/posts?userId=${id}`);
+        const res = await axios.get(`/api/v1/posts?userId=${id}`);
         setPosts(res.data);
       } catch (err) {
         console.log(err);

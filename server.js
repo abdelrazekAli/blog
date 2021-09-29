@@ -14,8 +14,6 @@ app.use(express.static("./client/build"));
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/users", userRouter);
 
-app.use("/api/posts", postRouter);
-
 app.get("*", (req, res) => {
   res.sendFile("index.html", {
     root: __dirname + "/client/build",

@@ -5,10 +5,10 @@ import { Context } from "../../context/Context";
 import { Button, Container, Form, Row, Col, Image } from "react-bootstrap";
 
 const AddPost = (props) => {
-  // const [title, setTitle] = useState("");
-  // const [body, setBody] = useState("");
-
   const { user, dispatch } = useContext(Context);
+  const [image, setImage] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
+  const [addSuccess, setaddSuccess] = useState(false);
 
   const [titleValid, setTitleValid] = useState({
     touched: false,
@@ -22,12 +22,6 @@ const AddPost = (props) => {
     msg: "",
   });
 
-  const [image, setImage] = useState(null);
-
-  const [isLoading, setisLoading] = useState(false);
-
-  const [addSuccess, setaddSuccess] = useState(false);
-
   const [error, setError] = useState({
     isError: false,
     msg: "",
@@ -37,6 +31,7 @@ const AddPost = (props) => {
     let val = e.target.value.trim();
     let valids = { ...titleValid };
     valids.touched = true;
+
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Title is required.";
@@ -57,6 +52,7 @@ const AddPost = (props) => {
     let val = e.target.value.trim();
     let valids = { ...bodyValid };
     valids.touched = true;
+
     if (val.length <= 0) {
       valids.isValid = false;
       valids.msg = "Body is required.";
@@ -91,7 +87,7 @@ const AddPost = (props) => {
 
   const refreshToken = async () => {
     try {
-      const res = await axios.post("/users/refresh-token", {
+      const res = await axios.post("/api/v1/users/refresh-token", {
         token: user.refreshToken,
       });
       dispatch({
@@ -129,13 +125,12 @@ const AddPost = (props) => {
         formData.append("title", e.target.title.value);
         formData.append("body", e.target.body.value);
         formData.append("image", image);
-        console.log(e.target.title.value, e.target.body.value, image);
 
         setisLoading(true);
 
         let res = await axiosJWT({
           method: "post",
-          url: "/posts",
+          url: "/api/v1/posts",
           data: formData,
           headers: {
             "auth-token": user.accessToken,
@@ -143,15 +138,14 @@ const AddPost = (props) => {
           },
         });
 
-        e.target.reset();
         if (res.data) {
-          window.location.replace(`/app/posts/${res.data._id}`);
           setisLoading(false);
           setaddSuccess(true);
+          window.location.replace(`/app/posts/${res.data._id}`);
+          e.target.reset();
         }
       }
     } catch (err) {
-      console.log(err);
       setisLoading(false);
       setaddSuccess(false);
       if (err.response.status === 400) {

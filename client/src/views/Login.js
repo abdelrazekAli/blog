@@ -4,6 +4,8 @@ import { Context } from "../context/Context";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
 
 const Login = () => {
+  const { dispatch, isFetching, error } = useContext(Context);
+
   const [emailValid, setEmailValid] = useState({
     touched: false,
     isValid: false,
@@ -15,8 +17,6 @@ const Login = () => {
     isValid: false,
     msg: "",
   });
-
-  const { dispatch, isFetching, error } = useContext(Context);
 
   const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
@@ -70,7 +70,7 @@ const Login = () => {
       password = e.target.password.value;
     try {
       if (emailValid.isValid && passwordValid.isValid) {
-        let res = await axios.post("/users/login", { email, password });
+        let res = await axios.post("/api/v1/users/login", { email, password });
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
         window.location.replace("/app");
       }

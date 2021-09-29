@@ -1,6 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
-import axios from "axios";
 
 const Register = () => {
   const [usernameValid, setUsernameValid] = useState({
@@ -109,7 +109,11 @@ const Register = () => {
         emailValid.isValid &&
         passwordValid.isValid
       ) {
-        let res = await axios.post("/users", { username, email, password });
+        let res = await axios.post("/api/v1/users", {
+          username,
+          email,
+          password,
+        });
         if (res.data) {
           window.location.replace("/app/login");
           setisLoading(false);

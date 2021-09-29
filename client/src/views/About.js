@@ -1,4 +1,6 @@
 import Head from "../components/blog/Head";
+
+// Import icons
 import {
   FaFacebook,
   FaGithub,

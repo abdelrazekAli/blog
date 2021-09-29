@@ -25,28 +25,25 @@ const EditProfile = () => {
   });
 
   const [posts, setPosts] = useState([]);
-
+  const [isLoading, setisLoading] = useState(false);
+  const [updateForm, setUpdateForm] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [updateSuccess, setupdateSuccess] = useState(false);
 
   const [showAlert, setShowAlert] = useState({
     isError: false,
     isSuccess: false,
   });
 
-  const [updateForm, setUpdateForm] = useState(false);
-  const [updateSuccess, setupdateSuccess] = useState(false);
-
   const [error, setError] = useState({
     isError: false,
     msg: "",
   });
 
-  const [isLoading, setisLoading] = useState(false);
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`/posts?userId=${user._id}`);
+        const res = await axios.get(`/api/v1/posts?userId=${user._id}`);
         setPosts(res.data);
       } catch (err) {
         console.log(err);
@@ -57,7 +54,7 @@ const EditProfile = () => {
 
   const refreshToken = async () => {
     try {
-      const res = await axios.post("/users/refresh-token", {
+      const res = await axios.post("/api/v1/users/refresh-token", {
         token: user.refreshToken,
       });
       dispatch({
@@ -89,7 +86,7 @@ const EditProfile = () => {
 
   const onDelete = async (post) => {
     try {
-      let res = await axiosJWT.delete(`/posts/${post._id}`, {
+      let res = await axiosJWT.delete(`/api/v1/posts/${post._id}`, {
         headers: {
           "auth-token": user.accessToken,
         },
@@ -157,7 +154,7 @@ const EditProfile = () => {
       setError({ isError: false, msg: "" });
       if (usernameValid.isValid && emailValid.isValid) {
         let res = await axiosJWT.put(
-          `/users/${user._id}`,
+          `/api/v1/users/${user._id}`,
           { username, email },
           { headers: { "auth-token": user.accessToken } }
         );
