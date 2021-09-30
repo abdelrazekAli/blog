@@ -4,7 +4,7 @@ import { Context } from "../../context/Context";
 import { Card, Button, ListGroup } from "react-bootstrap";
 import defaultImg from "../../assets/images/defaultImg.jpg";
 
-const Post = ({ post, onShow, userProfile, onDelete }) => {
+const Post = ({ post, onShow, userProfile, onDelete, modalBtn }) => {
   const { user } = useContext(Context);
 
   // Cut post body
