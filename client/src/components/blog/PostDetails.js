@@ -119,7 +119,7 @@ const PostDetails = (props) => {
             className="w-50 my-2"
             src={
               post.postImg
-                ? `https://azstorageabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
+                ? `https://blogabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
                 : defaultImg
             }
           />
