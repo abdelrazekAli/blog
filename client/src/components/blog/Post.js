@@ -25,7 +25,7 @@ const Post = ({ post, onShow, userProfile, onDelete, modalBtn }) => {
           variant="top"
           src={
             post.postImg
-              ? `https://azstorageabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
+              ? `https://blogabdelrazek.blob.core.windows.net/postimgs/${post.postImg}`
               : defaultImg
           }
         />
