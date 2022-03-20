@@ -1,10 +1,8 @@
-# blog
+# Mern Blog
 
-> Blog
+Users can register, login, write posts, and edit or delete it
 
-- users can register, login, write posts, and edit or delete it
-
-### Blog Demo
+### Demo
 
 ##### https://blog.abdelrazek.live
 
